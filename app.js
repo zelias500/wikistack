@@ -2,6 +2,7 @@ var express = require("express");
 var morgan = require("morgan");
 var bodyParser = require("body-parser");
 var swig = require("swig");
+require('./filters')(swig);
 
 var app = express();
 
