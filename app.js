@@ -22,6 +22,15 @@ app.engine('html', swig.renderFile);
 // turn of swig's caching
 swig.setDefaults({cache: false});
 
+
 app.use(require('./routes'));
+
+// WHY DOESNT THIS WORK??
+app.use(function(err, req, res, next){
+	console.error("THIS IS AN ERROR", err.stack);
+	res.render('error', err.stack);
+	// next();
+})
+
 
 app.listen(3000);

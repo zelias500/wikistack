@@ -6,6 +6,18 @@ mongoose.connect('mongodb://localhost/wikistack'); // <= db name will be 'wikist
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongodb connection error:'));
 
+var invalid = /\W/g
+var spaces = /\s/g
+function urlFriendly (title) {
+	if (typeof title !== 'undefined' && title !== "") {
+		var result = title.replace(spaces, "_");
+		return result.replace(invalid, "");		
+	}
+	else {
+		return Math.random().toString(36).substring(2, 7);
+	}
+}
+
 var statuses = ['open','closed']
 
 var pageSchema = new mongoose.Schema({
@@ -19,6 +31,11 @@ var pageSchema = new mongoose.Schema({
 
 pageSchema.virtual("route").get(function (){
 	return "/wiki/"+this.urlTitle;
+})
+
+pageSchema.pre('validate', function(next){
+	this.urlTitle = urlFriendly(this.title);
+	next();
 })
 
 var userSchema = new mongoose.Schema({
