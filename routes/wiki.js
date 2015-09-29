@@ -7,7 +7,11 @@ var User = models.User;
 module.exports = router;
 
 router.get("/", function(req, res, next){
-	res.send("wiki home page!!");
+	Page.find().then(function(data){
+		res.render("index", {pages: data});
+	})
+
+	// res.send("wiki home page!!");
 })
 
 router.post("/", function(req, res, next){
