@@ -17,7 +17,8 @@ router.get("/", function(req, res, next){
 router.post("/", function(req, res, next){
 	var page = new Page({
 		title: req.body.title,
-		content: req.body.content
+		content: req.body.content,
+		tags: req.body.tags.split(" ")
 	})
 
 	console.log(page);
@@ -34,14 +35,26 @@ router.get("/add", function(req, res, next){
 	res.render('addpage');
 });
 
+router.get("/search", function(req, res, next){
+	if (!Object.keys(req.query).length) res.render('tagsearch');
+	else {
+		// console.log(req.query.tagSearch);
+		console.log(Page.findByTag(req.query.tagSearch));
+		var tagged = Page.findByTag(req.query.tagSearch);
+		// console.log(tagged);
+		res.render('tagsearch', tagged);		
+	}
+})
+
 router.get("/:urlTitle", function(req, res, next){
 	console.log(req.params);
 	// res.send("we got to the page at "+req.params.urlTitle);
 
 	Page.findOne({urlTitle: req.params.urlTitle}).exec()
 	.then(function(data){
-		// res.json(data);
-		res.render("wikipage", data);
+		var thisPage = data;
+		thisPage.tags = thisPage.tags.join(" ");
+		res.render("wikipage", thisPage);
 	}).catch(next);
 
 

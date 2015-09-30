@@ -7,7 +7,7 @@ var wiki = require('./wiki');
 module.exports = router;
 
 router.get("/", function(req, res, next){
-	res.render("index");
+	res.redirect("/wiki");
 })
 
 router.use("/wiki", wiki);

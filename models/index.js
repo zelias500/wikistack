@@ -26,7 +26,8 @@ var pageSchema = new mongoose.Schema({
 	content: {type: String, required: true},
 	status: {type: String, enum: statuses}, 
 	date: {type: Date, default: Date.now},
-	author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+	author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+	tags: [String]
 })
 
 pageSchema.virtual("route").get(function (){
@@ -38,16 +39,21 @@ pageSchema.pre('validate', function(next){
 	next();
 })
 
+pageSchema.statics.findByTag = function(tag){
+    return this.find({ tags: {$elemMatch: { $eq: tag } } }).exec()
+}
+
 var userSchema = new mongoose.Schema({
   name: {type: String, required:true},
   email: {type: String, required:true, unique:true}
 });
 
 var Page = mongoose.model('Page', pageSchema);
+
+
 var User = mongoose.model('User', userSchema);
 
 module.exports = {
   Page: Page,
   User: User
 };
-
