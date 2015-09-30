@@ -40,7 +40,9 @@ pageSchema.pre('validate', function(next){
 })
 
 pageSchema.statics.findByTag = function(tag){
-    return this.find({ tags: {$elemMatch: { $eq: tag } } }).exec()
+	tag = tag.split(" ");
+    // return this.find({ tags: {$elemMatch: { $eq: tag } } }).exec()
+    return this.find({ tags: { $in: tag } }).exec()
 }
 
 var userSchema = new mongoose.Schema({

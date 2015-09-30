@@ -39,10 +39,13 @@ router.get("/search", function(req, res, next){
 	if (!Object.keys(req.query).length) res.render('tagsearch');
 	else {
 		// console.log(req.query.tagSearch);
-		console.log(Page.findByTag(req.query.tagSearch));
-		var tagged = Page.findByTag(req.query.tagSearch);
+		// console.log(Page.findByTag(req.query.tagSearch));
+		Page.findByTag(req.query.tagSearch).then(function(pages){
+			console.log(pages);
+			res.render('tagsearch', {pages: pages});
+		})
 		// console.log(tagged);
-		res.render('tagsearch', tagged);		
+		// res.render('tagsearch', tagged);		
 	}
 })
 
@@ -53,7 +56,7 @@ router.get("/:urlTitle", function(req, res, next){
 	Page.findOne({urlTitle: req.params.urlTitle}).exec()
 	.then(function(data){
 		var thisPage = data;
-		thisPage.tags = thisPage.tags.join(" ");
+		// thisPage.tags = thisPage.tags.join(" ");
 		res.render("wikipage", thisPage);
 	}).catch(next);
 
