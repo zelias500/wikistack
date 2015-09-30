@@ -59,7 +59,10 @@ router.get("/:urlTitle", function(req, res, next){
 		// thisPage.tags = thisPage.tags.join(" ");
 		res.render("wikipage", thisPage);
 	}).catch(next);
-
-
-
 })
+
+// router.get("/:urlTitle/similar",function(req, res, next){
+
+
+	
+// })
